@@ -5,7 +5,7 @@ a library to show unobstrusive notifications in a Gnome environment.
 
 ## Usage
 
-   import notify-nim
+   import notify
 
     var n: Notification = create("Title", "Body of the notification", "dialog-information")
     n.show()
@@ -22,11 +22,11 @@ Some useful ones are:
 
 You can require it in `your_program.nimble` [file](https://github.com/nim-lang/nimble#depsdependencies):
 
-    requires "nim > 0.19.0", "notify-nim"
+    requires "nim > 0.19.0", "notify"
     
 Or you can install it with [nimble](https://github.com/nim-lang/nimble#nimble-install):
 
-    nimble install notify-nim
+    nimble install notify
     
  ### Requisites
  

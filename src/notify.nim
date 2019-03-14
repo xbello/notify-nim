@@ -1,4 +1,4 @@
-import nim_notifypkg/libnotify
+import notifypkg/libnotify
 
 
 type

@@ -6,7 +6,7 @@ description   = "A wrapper to notification libraries"
 license       = "MIT"
 srcDir        = "src"
 installExt    = @["nim"]
-bin           = @["nim_notify"]
+bin           = @["notify"]
 
 
 # Dependencies
