@@ -1,6 +1,6 @@
 # Package
 
-version       = "0.1.0"
+version       = "0.1.1"
 author        = "Xabi Bello"
 description   = "A wrapper to notification libraries"
 license       = "MIT"
@@ -12,3 +12,8 @@ bin           = @["notify"]
 # Dependencies
 
 requires "nim >= 0.19.4"
+
+when defined(nimdistros):
+  import distros
+  if detectOs(Linux):
+    foreignDep "libnotify"
