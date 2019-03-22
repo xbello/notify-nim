@@ -5,10 +5,13 @@ a library to show unobstrusive notifications in a Gnome environment.
 
 ## Usage
 
-   import notify
+
+    import notify
 
     var n: Notification = create("Title", "Body of the notification", "dialog-information")
-    n.show()
+    # Optionally set a timeout in milliseconds
+    n.timeout = 1000
+    discard n.show()
 
 `icon` values are PNG files found in places like `/usr/share/icons/gnome/`.
 Some useful ones are:
