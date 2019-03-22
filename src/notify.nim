@@ -11,6 +11,13 @@ type
     cptr: NotifyNotificationPtr
 
 
+proc destroy(notification: Notification) =
+  if notification.cptr != nil:
+    g_free(notification.cptr)
+  if notify_is_initted():
+    notify_uninit()
+
+
 proc create*(summary, body, icon: string): Notification =
   ## Init a new notification
   ##
@@ -44,11 +51,6 @@ proc create*(summary, body, icon: string): Notification =
     timeout: 3000)
 
 
-proc destroy(notification: Notification) =
-  if notification.cptr != nil:
-    notify_uninit()
-
-
 proc show*(notification: Notification): bool =
   ## Show the notification in its correspondent area.
   var e: GErrorPtr
@@ -56,8 +58,9 @@ proc show*(notification: Notification): bool =
     cast[int32](notification.timeout))
 
   if notify_notification_show(notification.cptr, e):
-    return true
-  return false
+    result = true
+
+  notification.destroy()
 
 
 proc update*(notification: Notification, sumary, body, icon: string): bool =
@@ -89,7 +92,7 @@ if isMainModule:
     of cmdArgument:
       values.add(key)
     of cmdLongOption, cmdShortOption:
-      echo ""
+      discard
     of cmdEnd:
       assert(false)
 
