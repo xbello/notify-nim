@@ -1,11 +1,15 @@
+import parseopt
+import sequtils
+import strutils
 import notifypkg/libnotify
 
 
 type
   Notification* = object
     app_name*, summary*, body*, icon*: string
-    timeout*: cint
+    timeout*: int
     cptr: NotifyNotificationPtr
+
 
 proc create*(summary, body, icon: string): Notification =
   ## Init a new notification
@@ -27,7 +31,8 @@ proc create*(summary, body, icon: string): Notification =
   ##
   ## The Notification object returned is defaulted to 3 seconds of timeout
   ##
-  notify_init("App")
+  if not notify_is_initted():
+    notify_init("App")
   var cptr: NotifyNotificationPtr = notify_notification_new(summary, body, icon)
 
   return Notification(
@@ -47,7 +52,8 @@ proc destroy(notification: Notification) =
 proc show*(notification: Notification): bool =
   ## Show the notification in its correspondent area.
   var e: GErrorPtr
-  notification.cptr.notify_notification_set_timeout(notification.timeout)
+  notification.cptr.notify_notification_set_timeout(
+    cast[int32](notification.timeout))
 
   if notify_notification_show(notification.cptr, e):
     return true
@@ -60,7 +66,8 @@ proc update*(notification: Notification, sumary, body, icon: string): bool =
     return true
   return false
 
-proc `timeout=`*(notification: var Notification, timeout: cint) {.inline.} =
+
+proc `timeout=`*(notification: var Notification, timeout: int) {.inline.} =
   ## Set the Notification timeout in milliseconds
   ##
   ## .. code-block:: Nim
@@ -73,6 +80,22 @@ proc `timeout=`*(notification: var Notification, timeout: cint) {.inline.} =
 
 
 if isMainModule:
-  var notif = create("Hello", "Sample", "dialog-information")
-  notif.timeout = 1000
+  var defaults: seq[string] = @["title", "body", "dialog-information", "3000"]
+  var values: seq[string] = @[]
+
+  var p = initOptParser()
+  for kind, key, val in p.getopt():
+    case kind
+    of cmdArgument:
+      values.add(key)
+    of cmdLongOption, cmdShortOption:
+      echo ""
+    of cmdEnd:
+      assert(false)
+
+  if len(values) < len(defaults):
+    values = values.concat(defaults[len(values) .. ^1])
+
+  var notif = create(values[0], values[1], values[2])
+  notif.timeout = values[3].parseInt
   discard notif.show()

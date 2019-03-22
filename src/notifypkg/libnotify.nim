@@ -8,6 +8,7 @@ type
 
 {.push dynlib: "libnotify.so.4".}
 proc notify_init*(s: cstring): bool {.importc, discardable.}
+proc notify_is_initted*(): bool {.importc.}
 proc notify_uninit*() {.importc.}
 
 proc notify_notification_new*(sumary, body, icon: cstring): NotifyNotificationPtr {.importc.}

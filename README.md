@@ -37,3 +37,10 @@ Or you can install it with [nimble](https://github.com/nim-lang/nimble#nimble-in
  
      [ubuntu]$ sudo apt install libnotify
      [fedora]$ sudo dnf install libnotify
+
+ ### What you get
+
+ You get a light wrapper and a `notify` binary to send notifications from the
+  command line::
+
+      $ notify Title "Body of the notification" task-due 2000
