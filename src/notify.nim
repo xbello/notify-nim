@@ -7,7 +7,8 @@ import notifypkg/libnotify
 
 type
   Notification* = object
-    app_name*, summary*, body*, icon*: string
+    app_name: string
+    summary*, body*, icon*: string
     timeout*: int
     cptr: NotifyNotificationPtr
 
