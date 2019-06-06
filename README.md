@@ -49,4 +49,4 @@ Docs
 ====
 
 [In the src dir](src/notify.html), created from the code comments with
-``nimble doc src/notify.nim``
+``nimble doc src/notify.nim``. Viewable also with [githack](https://rawcdn.githack.com/xbello/notify-nim/5e2ebf217657393cd6b0230f988860d4c1960e27/src/notify.html)
