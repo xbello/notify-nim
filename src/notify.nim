@@ -1,5 +1,6 @@
 import parseopt
 import sequtils
+import strformat
 import strutils
 import notifypkg/libnotify
 
@@ -18,12 +19,12 @@ proc destroy(notification: Notification) =
     notify_uninit()
 
 
-proc create*(summary, body, icon: string): Notification =
+proc newNotification*(summary, body, icon: string): Notification =
   ## Init a new notification
   ##
   ## .. code-block:: Nim
   ##
-  ##   var n: Notification = create("Title", "Body of the notification", "icon")
+  ##   var n: Notification = newNotification("Title", "Body of the notification", "icon")
   ##   n.show()
   ##
   ## Icon values are PNG files found in places like ``/usr/share/icons/gnome/``.
@@ -50,6 +51,9 @@ proc create*(summary, body, icon: string): Notification =
     icon: icon,
     timeout: 3000)
 
+proc `$`*(n: Notification): string =
+  &"Title: {n.summary}, Body: {n.body}, Icon: {n.icon}"
+
 
 proc show*(notification: Notification): bool =
   ## Show the notification in its correspondent area.
@@ -75,7 +79,7 @@ proc `timeout=`*(notification: var Notification, timeout: int) {.inline.} =
   ##
   ## .. code-block:: Nim
   ##
-  ##     var n = create("Title", "Body", "dialog-information")
+  ##     var n = newNotification("Title", "Body", "dialog-information")
   ##     n.timeout = 500
   ##     discard n.show()
   ##
@@ -99,6 +103,6 @@ if isMainModule:
   if len(values) < len(defaults):
     values = values.concat(defaults[len(values) .. ^1])
 
-  var notif = create(values[0], values[1], values[2])
+  var notif = newNotification(values[0], values[1], values[2])
   notif.timeout = values[3].parseInt
   discard notif.show()

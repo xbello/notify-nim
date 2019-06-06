@@ -17,4 +17,4 @@ proc notify_notification_update*(notification: NotifyNotificationPtr, sumary, bo
 proc notify_notification_set_timeout*(notification: NotifyNotificationPtr, timeout: cint): void {.importc.}
 {.pop.}
 
-proc g_free*(notification: NotifyNotificationPtr) {.importc, dynlib: "libglib(|2.0).so".}
+proc g_free*(notification: NotifyNotificationPtr) {.importc, dynlib: "libglib(|-2.0).so".}

@@ -8,7 +8,7 @@ a library to show unobstrusive notifications in a Gnome environment.
 
     import notify
 
-    var n: Notification = create("Title", "Body of the notification", "dialog-information")
+    var n: Notification = newNotification("Title", "Body of the notification", "dialog-information")
     # Optionally set a timeout in milliseconds
     n.timeout = 1000
     discard n.show()
@@ -23,7 +23,7 @@ Some useful ones are:
     
 ## Install
 
-You can require it in `your_program.nimble` [file](https://github.com/nim-lang/nimble#depsdependencies):
+**Best** You can require it in `your_program.nimble` [file](https://github.com/nim-lang/nimble#depsdependencies):
 
     requires "nim > 0.19.0", "notify"
     
