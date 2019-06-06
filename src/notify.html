@@ -1265,7 +1265,7 @@ function main() {
   <li><a class="reference" href="#show%2CNotification"
     title="show(notification: Notification): bool"><wbr />show<span class="attachedType" style="visibility:hidden">Notification</span></a></li>
   <li><a class="reference" href="#update%2CNotification%2Cstring%2Cstring%2Cstring"
-    title="update(notification: Notification; sumary, body, icon: string): bool"><wbr />update<span class="attachedType" style="visibility:hidden">Notification</span></a></li>
+    title="update(n: var Notification; summary, body, icon: string = &quot;&quot;): bool"><wbr />update<span class="attachedType" style="visibility:hidden">Notification</span></a></li>
   <li><a class="reference" href="#timeout%3D%2CNotification%2Cint"
     title="timeout=(notification: var Notification; timeout: int)"><wbr />timeout=<span class="attachedType" style="visibility:hidden">Notification</span></a></li>
 
@@ -1304,7 +1304,7 @@ function main() {
 <a id="newNotification,string,string,string"></a>
 <dt><pre><span class="Keyword">proc</span> <span class="Identifier">newNotification</span><span class="Other">(</span><span class="Identifier">summary</span><span class="Other">,</span> <span class="Identifier">body</span><span class="Other">,</span> <span class="Identifier">icon</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">)</span><span class="Other">:</span> <a href="notify.html#Notification"><span class="Identifier">Notification</span></a> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
-Init a new notification<pre class="listing"><span class="Keyword">var</span> <span class="Identifier">n</span><span class="Punctuation">:</span> <span class="Identifier">Notification</span> <span class="Operator">=</span> <span class="Identifier">newNotification</span><span class="Punctuation">(</span><span class="StringLit">&quot;Title&quot;</span><span class="Punctuation">,</span> <span class="StringLit">&quot;Body of the notification&quot;</span><span class="Punctuation">,</span> <span class="StringLit">&quot;icon&quot;</span><span class="Punctuation">)</span>
+Init a new notification.<pre class="listing"><span class="Keyword">var</span> <span class="Identifier">n</span><span class="Punctuation">:</span> <span class="Identifier">Notification</span> <span class="Operator">=</span> <span class="Identifier">newNotification</span><span class="Punctuation">(</span><span class="StringLit">&quot;Title&quot;</span><span class="Punctuation">,</span> <span class="StringLit">&quot;Body of the notification&quot;</span><span class="Punctuation">,</span> <span class="StringLit">&quot;icon&quot;</span><span class="Punctuation">)</span>
 <span class="Identifier">n</span><span class="Operator">.</span><span class="Identifier">show</span><span class="Punctuation">(</span><span class="Punctuation">)</span></pre><p>Icon values are PNG files found in places like <tt class="docutils literal"><span class="pre">/usr/share/icons/gnome/</span></tt>. Some useful ones are:</p>
 <pre class="listing"><span class="Identifier">dialog</span><span class="Operator">-</span><span class="Identifier">error</span>        <span class="Identifier">avatar</span><span class="Operator">-</span><span class="Identifier">default</span>  <span class="Identifier">user</span><span class="Operator">-</span><span class="Identifier">invisible</span>
 <span class="Identifier">dialog</span><span class="Operator">-</span><span class="Identifier">information</span>  <span class="Identifier">computer</span><span class="Operator">-</span><span class="Identifier">fail</span>   <span class="Identifier">user</span><span class="Operator">-</span><span class="Identifier">available</span>
@@ -1322,21 +1322,29 @@ Init a new notification<pre class="listing"><span class="Keyword">var</span> <sp
 <a id="show,Notification"></a>
 <dt><pre><span class="Keyword">proc</span> <span class="Identifier">show</span><span class="Other">(</span><span class="Identifier">notification</span><span class="Other">:</span> <a href="notify.html#Notification"><span class="Identifier">Notification</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
-Show the notification in its correspondent area.
+<p>Show the notification in its correspondent area.</p>
+<p>Notifications are destroyed after they are shown. </p>
+
 
 </dd>
 <a id="update,Notification,string,string,string"></a>
-<dt><pre><span class="Keyword">proc</span> <span class="Identifier">update</span><span class="Other">(</span><span class="Identifier">notification</span><span class="Other">:</span> <a href="notify.html#Notification"><span class="Identifier">Notification</span></a><span class="Other">;</span> <span class="Identifier">sumary</span><span class="Other">,</span> <span class="Identifier">body</span><span class="Other">,</span> <span class="Identifier">icon</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
+<dt><pre><span class="Keyword">proc</span> <span class="Identifier">update</span><span class="Other">(</span><span class="Identifier">n</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="notify.html#Notification"><span class="Identifier">Notification</span></a><span class="Other">;</span> <span class="Identifier">summary</span><span class="Other">,</span> <span class="Identifier">body</span><span class="Other">,</span> <span class="Identifier">icon</span><span class="Other">:</span> <span class="Identifier">string</span> <span class="Other">=</span> <span class="StringLit">&quot;&quot;</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
     <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
-Update the values of a notification before showing it.
+<p>Update the values of a notification before showing it.</p>
+<p>Updates only the values provided, e.g.:</p>
+<pre class="listing"><span class="Keyword">var</span> <span class="Identifier">n</span> <span class="Operator">=</span> <span class="Identifier">newNotification</span><span class="Punctuation">(</span><span class="StringLit">&quot;Title&quot;</span><span class="Punctuation">,</span> <span class="StringLit">&quot;Body&quot;</span><span class="Punctuation">,</span> <span class="StringLit">&quot;dialog-information&quot;</span><span class="Punctuation">)</span>
+<span class="Identifier">n</span><span class="Operator">.</span><span class="Identifier">update</span><span class="Punctuation">(</span><span class="Identifier">body</span><span class="Operator">=</span><span class="StringLit">&quot;New Body&quot;</span><span class="Punctuation">)</span>
+<span class="Keyword">discard</span> <span class="Identifier">n</span><span class="Operator">.</span><span class="Identifier">show</span><span class="Punctuation">(</span><span class="Punctuation">)</span>
+<span class="Comment"># Shows a Notification with &quot;Title&quot;, &quot;New Body&quot; and &quot;dialog-information&quot;</span></pre><p><tt class="docutils literal"><span class="pre">libnotify</span></tt> doesn't allow empty fields </p>
+
 
 </dd>
 <a id="timeout=,Notification,int"></a>
 <dt><pre><span class="Keyword">proc</span> <span class="Identifier">timeout=</span><span class="Other">(</span><span class="Identifier">notification</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="notify.html#Notification"><span class="Identifier">Notification</span></a><span class="Other">;</span> <span class="Identifier">timeout</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">)</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">inline</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
     <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
-Set the Notification timeout in milliseconds<pre class="listing"><span class="Keyword">var</span> <span class="Identifier">n</span> <span class="Operator">=</span> <span class="Identifier">newNotification</span><span class="Punctuation">(</span><span class="StringLit">&quot;Title&quot;</span><span class="Punctuation">,</span> <span class="StringLit">&quot;Body&quot;</span><span class="Punctuation">,</span> <span class="StringLit">&quot;dialog-information&quot;</span><span class="Punctuation">)</span>
+Set the Notification timeout in milliseconds.<pre class="listing"><span class="Keyword">var</span> <span class="Identifier">n</span> <span class="Operator">=</span> <span class="Identifier">newNotification</span><span class="Punctuation">(</span><span class="StringLit">&quot;Title&quot;</span><span class="Punctuation">,</span> <span class="StringLit">&quot;Body&quot;</span><span class="Punctuation">,</span> <span class="StringLit">&quot;dialog-information&quot;</span><span class="Punctuation">)</span>
 <span class="Identifier">n</span><span class="Operator">.</span><span class="Identifier">timeout</span> <span class="Operator">=</span> <span class="DecNumber">500</span>
 <span class="Keyword">discard</span> <span class="Identifier">n</span><span class="Operator">.</span><span class="Identifier">show</span><span class="Punctuation">(</span><span class="Punctuation">)</span></pre>
 
@@ -1351,7 +1359,7 @@ Set the Notification timeout in milliseconds<pre class="listing"><span class="Ke
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small>Made with Nim. Generated: 2019-06-06 11:00:10 UTC</small>
+        <small>Made with Nim. Generated: 2019-06-06 11:31:32 UTC</small>
       </div>
     </div>
   </div>

@@ -13,14 +13,12 @@ type
 
 
 proc destroy(notification: Notification) =
-  if notification.cptr != nil:
-    g_free(notification.cptr)
   if notify_is_initted():
     notify_uninit()
 
 
 proc newNotification*(summary, body, icon: string): Notification =
-  ## Init a new notification
+  ## Init a new notification.
   ##
   ## .. code-block:: Nim
   ##
@@ -57,6 +55,12 @@ proc `$`*(n: Notification): string =
 
 proc show*(notification: Notification): bool =
   ## Show the notification in its correspondent area.
+  ##
+  ## Notifications are destroyed after they are shown.
+  ##
+  if not notify_is_initted():
+    return false
+
   var e: GErrorPtr
   notification.cptr.notify_notification_set_timeout(
     cast[int32](notification.timeout))
@@ -67,15 +71,34 @@ proc show*(notification: Notification): bool =
   notification.destroy()
 
 
-proc update*(notification: Notification, sumary, body, icon: string): bool =
+proc update*(n: var Notification, summary, body, icon: string = ""): bool =
   ## Update the values of a notification before showing it.
-  if notify_notification_update(notification.cptr, sumary, body, icon):
+  ##
+  ## Updates only the values provided, e.g.:
+  ##
+  ## .. code-block:: Nim
+  ##
+  ##     var n = newNotification("Title", "Body", "dialog-information")
+  ##     n.update(body="New Body")
+  ##     discard n.show()
+  ##     # Shows a Notification with "Title", "New Body" and "dialog-information"
+  ##
+  ## ``libnotify`` doesn't allow empty fields
+  ##
+  if summary != "":
+    n.summary = summary
+  if body != "":
+    n.body = body
+  if icon != "":
+    n.icon = icon
+
+  if notify_notification_update(n.cptr, n.summary, n.body, n.icon):
     return true
   return false
 
 
 proc `timeout=`*(notification: var Notification, timeout: int) {.inline.} =
-  ## Set the Notification timeout in milliseconds
+  ## Set the Notification timeout in milliseconds.
   ##
   ## .. code-block:: Nim
   ##

@@ -44,3 +44,9 @@ Or you can install it with [nimble](https://github.com/nim-lang/nimble#nimble-in
   command line::
 
       $ notify Title "Body of the notification" task-due 2000
+
+Docs
+====
+
+[In the src dir](src/notify.html), created from the code comments with
+``nimble doc src/notify.nim``
