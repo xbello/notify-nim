@@ -2,12 +2,12 @@ import parseopt
 import sequtils
 import strformat
 import strutils
-import notifypkg/libnotify
+import notifypkg/libnotify, notifypkg/utils
 
 
 type
   Notification* = object
-    app_name: string
+    app_name*: string
     summary*, body*, icon*: string
     timeout*: int
     cptr: NotifyNotificationPtr
@@ -42,7 +42,7 @@ proc newNotification*(summary, body, icon: string): Notification =
     notify_init("App")
   var cptr: NotifyNotificationPtr = notify_notification_new(summary, body, icon)
 
-  return Notification(
+  Notification(
     cptr: cptr,
     app_name: "App",
     summary: summary,
@@ -86,16 +86,13 @@ proc update*(n: var Notification, summary, body, icon: string = ""): bool =
   ##
   ## ``libnotify`` doesn't allow empty fields
   ##
-  if summary != "":
-    n.summary = summary
-  if body != "":
-    n.body = body
-  if icon != "":
-    n.icon = icon
+  n.summary = summary or n.summary
+  n.body = body or n.body
+  n.icon = icon or n.icon
 
   if notify_notification_update(n.cptr, n.summary, n.body, n.icon):
     return true
-  return false
+  false
 
 
 proc `timeout=`*(notification: var Notification, timeout: int) {.inline.} =
