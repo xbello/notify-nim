@@ -2,5 +2,6 @@
 README.html
 
 tests/test_notification
+tests/test_utils
 
 notify
