@@ -2,6 +2,8 @@ import parseopt
 import sequtils
 import strformat
 import strutils
+import unicode
+
 import notifypkg/libnotify, notifypkg/utils
 
 
@@ -16,7 +18,6 @@ type
 proc destroy(notification: Notification) =
   if notify_is_initted():
     notify_uninit()
-
 
 proc newNotification*(summary, body, icon: string): Notification =
   ## Init a new notification.
@@ -53,7 +54,6 @@ proc newNotification*(summary, body, icon: string): Notification =
 proc `$`*(n: Notification): string =
   &"Title: {n.summary}, Body: {n.body}, Icon: {n.icon}"
 
-
 proc show*(notification: Notification): bool =
   ## Show the notification in its correspondent area.
   ##
@@ -70,7 +70,6 @@ proc show*(notification: Notification): bool =
     result = true
 
   notification.destroy()
-
 
 proc update*(n: var Notification, summary, body, icon: string = ""): bool =
   ## Update the values of a notification before showing it.
@@ -93,7 +92,6 @@ proc update*(n: var Notification, summary, body, icon: string = ""): bool =
   if notify_notification_update(n.cptr, n.summary, n.body, n.icon):
     return true
   false
-
 
 proc `timeout=`*(notification: var Notification, timeout: int) {.inline.} =
   ## Set the Notification timeout in milliseconds.
@@ -121,9 +119,21 @@ if isMainModule:
     of cmdEnd:
       assert(false)
 
+  # Validate the number of arguments is correct
   if len(values) < len(defaults):
     values = values.concat(defaults[len(values) .. ^1])
+  if len(values) > len(defaults):
+    quit(&"Too many arguments. Enclose text with spaces in quotes")
+
+  # Validate that everything is UTF-9
+  for value in values:
+    if validateUTF8(value) != -1:
+      quit(&"Text is invalid UTF-8: {value}")
 
   var notif = newNotification(values[0], values[1], values[2])
-  notif.timeout = values[3].parseInt
+  try:
+    notif.timeout = values[3].parseInt
+  except ValueError:
+    notif.destroy()
+    quit(&"Timeout should be an integer: {values[3]}")
   discard notif.show()
